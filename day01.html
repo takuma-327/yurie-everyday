@@ -213,17 +213,40 @@
   </div>
 
   <!-- 読み上げ用のJavaScript -->
-  <script>
+ <script>
+    let englishVoices = [];
+
+    // 端末にインストールされている音声リストを取得・更新する関数
+    function loadVoices() {
+      const allVoices = window.speechSynthesis.getVoices();
+      // 'en-US' (アメリカ英語) または 'en-GB' (イギリス英語) の声を抽出
+      englishVoices = allVoices.filter(voice => voice.lang.includes('en-'));
+    }
+
+    // 音声リストは非同期で読み込まれることがあるため、変更があったら再読み込み
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = loadVoices;
+      loadVoices(); // 初回実行
+    }
+
     function speakText(text) {
       if ('speechSynthesis' in window) {
-        // 現在再生中の音声があればキャンセル（連続タップ対策）
-        window.speechSynthesis.cancel();
+        window.speechSynthesis.cancel(); // 連続再生防止
         
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'en-US'; // アメリカ英語
-        utterance.rate = 0.9;     // 大人のやり直し学習向けに、標準より少しだけゆっくりに設定
+        utterance.lang = 'en-US';
+        utterance.rate = 0.9; // 大人のやり直し学習向け
         utterance.pitch = 1.0;
-        
+
+        // もし英語の音声が取得できていれば、高品質なものを優先してセット
+        if (englishVoices.length > 0) {
+          // iOS/Macの「Samantha」、またはChromeの「Google US English」などを優先的に探す
+          const bestVoice = englishVoices.find(v => v.name.includes('Samantha') || v.name.includes('Google US English')) 
+                            || englishVoices[0]; // 見つからなければ最初の英語ボイス
+          
+          utterance.voice = bestVoice;
+        }
+
         window.speechSynthesis.speak(utterance);
       } else {
         alert("申し訳ありません。お使いのブラウザは音声読み上げに対応していません。");
