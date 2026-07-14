@@ -253,3 +253,9 @@ h2 {
   display: flex;
   align-items: center;
 }
+/* =========================================
+   App State (画面切り替え用)
+========================================= */
+.hidden {
+  display: none !important;
+}
