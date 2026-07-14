@@ -5,13 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>30日間でマスターする中学英語（単語＋構文）</title>
   <link rel="stylesheet" href="style.css">
+  <!-- 外部のJavaScriptファイルを読み込む -->
+  <script src="main.js" defer></script>
 </head>
 <body>
   <div class="container">
     
-    <!-- ==========================================
-         トップページ（メニュー画面）
-    =========================================== -->
+    <!-- トップページ（メニュー画面） -->
     <div id="home-view">
       <header>
         <h1>30日間でマスターする中学英語</h1>
@@ -24,9 +24,7 @@
       </main>
     </div>
 
-    <!-- ==========================================
-         個別学習ページ（コンテンツ画面）
-    =========================================== -->
+    <!-- 個別学習ページ（コンテンツ画面） -->
     <div id="lesson-view" class="hidden">
       <header>
         <h1 id="lesson-title">Day X: タイトル</h1>
@@ -42,154 +40,5 @@
     </div>
 
   </div>
-
-  <!-- ==========================================
-       JavaScript（データと動きの制御）
-  =========================================== -->
-  <script>
-    // ▼ ここに30日分のデータをひたすら追加していくだけでOKです！
-    const lessonData = {
-      1: {
-        title: "Day 01: 基本の型「誰が・どうする・何を」",
-        desc: "英語の最も重要なルール「SVO（主語＋動詞＋目的語）」の語順をマスターしましょう。",
-        words: [
-          { en: "check", ja: "確認する・調べる", sentEn: "I checked the schedule.", sentJa: "私はスケジュールを確認しました。", note: "S: I / V: checked / O: the schedule" },
-          { en: "need", ja: "必要とする", sentEn: "We need a new plan.", sentJa: "私たちは新しい計画が必要です。", note: "S: We / V: need / O: a new plan" },
-          // ※長くなるため、サンプルとして2単語のみ記載していますが、ここに10個書きます
-        ]
-      },
-      2: {
-        title: "Day 02: 実践アクション動詞（SVO）",
-        desc: "1日目と同じ語順で、仕事でよく使う動詞をマスターしましょう。",
-        words: [
-          { en: "improve", ja: "改善する・向上させる", sentEn: "We improved the system.", sentJa: "私たちはそのシステムを改善しました。", note: "S: We / V: improved / O: the system" },
-          { en: "prepare", ja: "準備する・用意する", sentEn: "I prepared the report.", sentJa: "私がその報告書を準備しました。", note: "S: I / V: prepared / O: the report" }
-        ]
-      },
-      3: {
-        title: "Day 03: 状態を伝える型「A ＝ B」",
-        desc: "「SVC（主語＋動詞＋補語）」の語順で、状況や気持ちをスマートに表現しましょう。",
-        words: [
-          { en: "be (is/am/are)", ja: "〜である・いる", sentEn: "The meeting is important.", sentJa: "その会議は重要です。", note: "S: The meeting / V: is / C: important" },
-          { en: "look", ja: "〜に見える", sentEn: "The data looks correct.", sentJa: "そのデータは正確に見えます。", note: "S: The data / V: looks / C: correct" }
-        ]
-      }
-    };
-
-    let currentDay = 1;
-    const totalDays = 30;
-
-    // 1. トップページのボタンを自動生成する
-    const grid = document.getElementById('day-buttons');
-    for (let i = 1; i <= totalDays; i++) {
-      const btn = document.createElement('a');
-      btn.href = "#";
-      btn.className = "day-link";
-      btn.innerText = `Day ${i.toString().padStart(2, '0')}`;
-      
-      // データが存在しない日はグレーアウト（クリック不可）にする処理
-      if (!lessonData[i]) {
-        btn.style.opacity = "0.5";
-        btn.style.cursor = "not-allowed";
-        btn.onclick = (e) => { e.preventDefault(); alert('準備中です！'); };
-      } else {
-        btn.onclick = (e) => {
-          e.preventDefault();
-          openLesson(i);
-        };
-      }
-      grid.appendChild(btn);
-    }
-
-    // 2. レッスン画面を開く
-    function openLesson(dayIndex) {
-      currentDay = dayIndex;
-      const data = lessonData[dayIndex];
-      
-      document.getElementById('lesson-title').innerText = data.title;
-      document.getElementById('lesson-desc').innerText = data.desc;
-      
-      const content = document.getElementById('lesson-content');
-      content.innerHTML = ""; // 中身をリセット
-
-      // 単語カードを生成
-      data.words.forEach(word => {
-        const cardHTML = `
-          <div class="lesson-card">
-            <div class="word-header">
-              <div class="word-en">
-                ${word.en}
-                <button class="play-btn" onclick="speakText('${word.en}')" title="音声を再生">🔊</button>
-              </div>
-              <div class="word-ja">${word.ja}</div>
-            </div>
-            <div class="sentence-box">
-              <div class="sentence-en">
-                ${word.sentEn}
-                <button class="play-btn" onclick="speakText('${word.sentEn.replace(/'/g, "\\'")}')" title="音声を再生">🔊</button>
-              </div>
-              <div class="sentence-ja">${word.sentJa}</div>
-              <div class="syntax-note">${word.note}</div>
-            </div>
-          </div>
-        `;
-        content.innerHTML += cardHTML;
-      });
-
-      // 次の日ボタンの表示制御
-      const nextBtn = document.getElementById('next-btn');
-      if (lessonData[currentDay + 1]) {
-        nextBtn.style.display = "inline-block";
-      } else {
-        nextBtn.style.display = "none";
-      }
-
-      // 画面切り替え
-      document.getElementById('home-view').classList.add('hidden');
-      document.getElementById('lesson-view').classList.remove('hidden');
-      window.scrollTo(0, 0); // ページ上部へスクロール
-    }
-
-    // 3. トップへ戻る
-    function goHome() {
-      document.getElementById('lesson-view').classList.add('hidden');
-      document.getElementById('home-view').classList.remove('hidden');
-      window.scrollTo(0, 0);
-    }
-
-    // 4. 次の日へ
-    function goNextDay() {
-      if (lessonData[currentDay + 1]) {
-        openLesson(currentDay + 1);
-      }
-    }
-
-    // ==========================================
-    // 音声読み上げプログラム（高品質ボイス対応）
-    // ==========================================
-    let englishVoices = [];
-    function loadVoices() {
-      const allVoices = window.speechSynthesis.getVoices();
-      englishVoices = allVoices.filter(voice => voice.lang.includes('en-'));
-    }
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.onvoiceschanged = loadVoices;
-      loadVoices();
-    }
-    function speakText(text) {
-      if ('speechSynthesis' in window) {
-        window.speechSynthesis.cancel();
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'en-US';
-        utterance.rate = 0.9;
-        
-        if (englishVoices.length > 0) {
-          const bestVoice = englishVoices.find(v => v.name.includes('Samantha') || v.name.includes('Google US English')) || englishVoices[0];
-          utterance.voice = bestVoice;
-        }
-        window.speechSynthesis.speak(utterance);
-      }
-    }
-  </script>
 </body>
 </html>
