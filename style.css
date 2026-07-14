@@ -1,0 +1,226 @@
+@charset "UTF-8";
+
+/* =========================================
+   Variables (カラー・フォント設定)
+========================================= */
+:root {
+  /* メインカラー：深みのあるフォレストグリーン（ザクグリーン） */
+  --main-color: #32523F;
+  --main-hover: #4A6B4F;
+  
+  /* ベースカラー：落ち着いたオフホワイト/ライトグレー */
+  --bg-color: #F4F6F5;
+  --card-bg: #FFFFFF;
+  
+  /* テキストカラー：読みやすいダークグレー */
+  --text-main: #333333;
+  --text-light: #666666;
+  --border-color: #E0E4E2;
+}
+
+/* =========================================
+   Base Settings
+========================================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  line-height: 1.6;
+  padding: 0 16px;
+}
+
+a {
+  text-decoration: none;
+  color: var(--main-color);
+  transition: opacity 0.3s ease;
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
+/* =========================================
+   Layout Containers
+========================================= */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+h1 {
+  font-size: 1.5rem;
+  color: var(--main-color);
+  margin-bottom: 10px;
+  letter-spacing: 0.05em;
+}
+
+h2 {
+  font-size: 1.25rem;
+  color: var(--text-main);
+  border-bottom: 2px solid var(--main-color);
+  padding-bottom: 8px;
+  margin-bottom: 24px;
+}
+
+.description {
+  color: var(--text-light);
+  font-size: 0.95rem;
+  margin-bottom: 32px;
+}
+
+/* =========================================
+   Index Page (メニュー画面)
+========================================= */
+.day-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 16px;
+}
+
+.day-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--main-color);
+  font-weight: bold;
+  padding: 16px 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  transition: all 0.3s ease;
+}
+
+.day-link:hover {
+  background-color: var(--main-color);
+  color: #FFFFFF;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* =========================================
+   Day Page (個別学習コンテンツ)
+========================================= */
+.lesson-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+}
+
+.word-header {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 16px;
+  border-bottom: 1px dashed var(--border-color);
+  padding-bottom: 12px;
+}
+
+.word-en {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--main-color);
+  margin-right: 16px;
+}
+
+.word-ja {
+  font-size: 1rem;
+  color: var(--text-light);
+}
+
+.sentence-box {
+  background-color: var(--bg-color);
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+}
+
+.sentence-en {
+  font-size: 1.15rem;
+  font-weight: bold;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.sentence-ja {
+  font-size: 0.95rem;
+  color: var(--text-light);
+}
+
+.syntax-note {
+  font-size: 0.85rem;
+  color: var(--main-color);
+  background-color: rgba(50, 82, 63, 0.1);
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 4px;
+  margin-top: 8px;
+  font-family: monospace, sans-serif;
+}
+
+/* =========================================
+   Navigation Buttons
+========================================= */
+.page-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.btn-back {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-light);
+}
+
+.btn-back:hover {
+  background-color: #EAECEC;
+}
+
+.btn-next {
+  background-color: var(--main-color);
+  color: #FFFFFF;
+}
+
+.btn-next:hover {
+  background-color: var(--main-hover);
+  color: #FFFFFF;
+}
+
+/* =========================================
+   Responsive Adjustments
+========================================= */
+@media (max-width: 480px) {
+  .day-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .word-en {
+    font-size: 1.25rem;
+  }
+  .sentence-en {
+    font-size: 1.05rem;
+  }
+}
